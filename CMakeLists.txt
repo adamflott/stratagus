@@ -590,7 +590,7 @@ set(stratagus_HDRS
 	${stratagus_guichan_HDRS}
 	${stratagus_spell_HDRS}
 	${CMAKE_CURRENT_BINARY_DIR}/version-generated.h
-	version-generated.h # This line is needed for CMake when generating Doxygen documentation
+	version-generated.h
 )
 
 # Configuration types
@@ -640,7 +640,6 @@ find_package(OpenGLES)
 find_package(SDL_gles)
 
 find_package(Sqlite)
-find_package(Doxygen)
 find_package(SelfPackers)
 
 include(CheckTypeSize)
@@ -678,7 +677,6 @@ option(WITH_STACKTRACE "Compile Stratagus with StackTrace library" ON)
 
 option(WITH_X11 "Compile Stratagus with X11 clipboard pasting support" ON)
 
-option(ENABLE_DOC "Generate Stratagus source code documentation with Doxygen" OFF)
 option(ENABLE_DEV "Install Stratagus game development headers files" OFF)
 option(ENABLE_UPX "Compress Stratagus executable binary with UPX packer" OFF)
 option(ENABLE_STRIP "Strip all symbols from executables" OFF)
@@ -968,12 +966,6 @@ else()
 	message("Touchscreen input: No (Enable by param -DENABLE_TOUCHSCREEN=ON)")
 endif()
 
-if(ENABLE_DOC AND DOXYGEN_FOUND)
-	message("Doxygen documentation: Yes (Disable by param -DENABLE_DOC=OFF)")
-else()
-	message("Doxygen documentation: No (Enable by param -DENABLE_DOC=ON)")
-endif()
-
 if(ENABLE_DEV)
 	message("Game development files: Yes (Disable by param -DENABLE_DEV=OFF)")
 else()
@@ -1123,33 +1115,6 @@ source_group(gameheaders FILES ${gameheaders_HDRS})
 
 ########### next target ###############
 
-set(doxygen_FILES
-	${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-	doc/Doxyfile-footer.html
-	doc/Doxyfile-header.html
-	${stratagus_SRCS}
-	${stratagus_HDRS}
-	${metaserver_SRCS}
-	${metaserver_HDRS}
-	${gameheaders_HDRS}
-	${png2stratagus_SRCS}
-)
-
-if(ENABLE_DOC AND DOXYGEN_FOUND)
-	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
-	add_custom_command(OUTPUT doxygen/index.html
-		COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-		DEPENDS ${doxygen_FILES}
-		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-		COMMENT "Generating Stratagus souce code documentation with Doxygen"
-		VERBATIM
-	)
-	add_custom_target(doc ALL DEPENDS doxygen/index.html)
-	list(APPEND CLEAN_FILES doxygen)
-endif()
-
-########### next target ###############
-
 macro(self_packer PACKER_TARGET)
 	get_target_property(PACKER_NAME ${PACKER_TARGET} OUTPUT_NAME)
 	if(NOT PACKER_NAME)
@@ -1192,24 +1157,6 @@ install(TARGETS png2stratagus DESTINATION ${BINDIR})
 if(SQLITE_FOUND)
 	install(TARGETS metaserver DESTINATION ${SBINDIR})
 endif()
-
-if(ENABLE_DOC AND DOXYGEN_FOUND)
-	install(FILES doc/stratagus.6 DESTINATION ${MANDIR})
-	install(FILES
-		doc/development.html
-		doc/faq.html
-		doc/gpl.html
-		doc/guichan-copyright.txt
-		doc/changelog.html
-		doc/index.html
-		doc/install.html
-		doc/media.html
-		doc/metaserver_protocol.txt
-		doc/README-SDL.txt
-		DESTINATION share/doc/stratagus
-	)
-	install(DIRECTORY doc/graphics doc/scripts ${CMAKE_CURRENT_BINARY_DIR}/doxygen DESTINATION ${DOCDIR})
-endif(ENABLE_DOC AND DOXYGEN_FOUND)
 
 if(ENABLE_DEV)
 	install(FILES ${gameheaders_HDRS} DESTINATION ${STRATAGUS_HEADERS})
