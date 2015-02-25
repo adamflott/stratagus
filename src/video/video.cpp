@@ -59,7 +59,7 @@
 ** separate files:
 **
 ** SDL : Simple Direct Media for Linux,
-**   Win32 (Windows 95/98/2000), BeOs, MacOS
+**   Win32 (Windows 95/98/2000), MacOS
 **   (visit http://www.libsdl.org)
 **
 ** @see sdl.cpp

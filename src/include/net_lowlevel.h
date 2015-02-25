@@ -51,10 +51,8 @@
 # include <netdb.h>
 # include <sys/socket.h>
 # include <sys/ioctl.h>
-# ifndef __BEOS__
-#  include <net/if.h>
-#  include <arpa/inet.h>
-# endif
+# include <net/if.h>
+# include <arpa/inet.h>
 # define INVALID_SOCKET -1
 
 #endif // !WIN32

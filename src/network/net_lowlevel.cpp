@@ -340,7 +340,7 @@ int NetSocketAddr(const Socket sock, unsigned long *ips, int maxAddr)
 	return nif;
 }
 #else // } {
-// Beos?? Mac??
+// Mac??
 int NetSocketAddr(const Socket sock, unsigned long *ips, int maxAddr)
 {
 	ips[0] = htonl(0x7f000001);
@@ -433,12 +433,10 @@ Socket NetOpenTCP(const char *addr, int port)
 int NetConnectTCP(Socket sockfd, unsigned long addr, int port)
 {
 	struct sockaddr_in sa;
-#ifndef __BEOS__
-	int opt = 1;
-	setsockopt(sockfd, SOL_SOCKET, SO_KEEPALIVE, (setsockopttype)&opt, sizeof(opt));
-	opt = 0;
-	setsockopt(sockfd, SOL_SOCKET, SO_LINGER, (setsockopttype)&opt, sizeof(opt));
-#endif
+        int opt = 1;
+        setsockopt(sockfd, SOL_SOCKET, SO_KEEPALIVE, (setsockopttype)&opt, sizeof(opt));
+        opt = 0;
+        setsockopt(sockfd, SOL_SOCKET, SO_LINGER, (setsockopttype)&opt, sizeof(opt));
 
 	if (addr == INADDR_NONE) {
 		return -1;

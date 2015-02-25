@@ -160,15 +160,6 @@
 
 #include <ctype.h>
 
-#ifdef USE_BEOS
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-
-extern void beos_init(int argc, char **argv);
-
-#endif
-
 #ifdef MAC_BUNDLE
 #define Button ButtonOSX
 #include <Carbon/Carbon.h>
@@ -343,9 +334,6 @@ static void PrintHeader()
 #endif
 #ifdef USE_BSD
 		"BSD "
-#endif
-#ifdef USE_BEOS
-		"BEOS "
 #endif
 #ifdef USE_MAC
 		"MAC "
@@ -661,10 +649,6 @@ int stratagusMain(int argc, char **argv)
 {
 #ifdef REDIRECT_OUTPUT
 	RedirectOutput();
-#endif
-#ifdef USE_BEOS
-	//  Parse arguments for BeOS
-	beos_init(argc, argv);
 #endif
 
 	//  Setup some defaults.

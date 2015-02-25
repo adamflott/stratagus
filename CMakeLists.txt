@@ -118,11 +118,6 @@ set(ai_SRCS
 )
 source_group(ai FILES ${ai_SRCS})
 
-set(beos_SRCS
-	src/beos/beos.cpp
-)
-source_group(beos FILES ${beos_SRCS})
-
 set(editor_SRCS
 	src/editor/editloop.cpp
 	src/editor/editor.cpp
@@ -824,11 +819,6 @@ if(LINUX)
 	add_definitions(-DUSE_LINUX)
 endif()
 
-if(BEOS)
-	add_definitions(-DUSE_BEOS)
-	set(stratagus_SRCS ${stratagus_SRCS} ${beos_SRCS})
-endif()
-
 # Stratagus needs to have char by default signed
 # No idea how to tell this to other compilers
 if(CMAKE_COMPILER_IS_GNUCXX)
@@ -958,8 +948,6 @@ elseif(APPLE)
 	message("Platform: Mac")
 elseif(BSD)
 	message("Platform: BSD")
-elseif(BEOS)
-	message("Platform: BEOS")
 elseif(LINUX)
 	message("Platform: Linux")
 else()

@@ -68,10 +68,6 @@
 #include "SDL_opengl.h"
 #endif
 
-#ifdef USE_BEOS
-#include <sys/socket.h>
-#endif
-
 #ifdef USE_WIN32
 #include <shellapi.h>
 #endif
