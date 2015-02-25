@@ -76,10 +76,7 @@ static std::string GetLocalPlayerNameFromEnv()
 
 #ifdef USE_WIN32
 	userName = getenv("USERNAME");
-#elif !defined(USE_MAEMO)
-	userName = getenv("USER");
 #endif
-
 	if (userName && userName[0]) {
 		return userName;
 	} else {

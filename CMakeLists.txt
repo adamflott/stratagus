@@ -180,11 +180,6 @@ set(guichan_SRCS
 )
 source_group(guichan FILES ${guichan_SRCS})
 
-set(maemo_SRCS
-	src/maemo/maemo.cpp
-)
-source_group(maemo FILES ${maemo_SRCS})
-
 set(map_SRCS
 	src/map/map.cpp
 	src/map/map_draw.cpp
@@ -531,7 +526,6 @@ set(stratagus_generic_HDRS
 	src/include/iocompat.h
 	src/include/iolib.h
 	src/include/luacallback.h
-	src/include/maemo.h
 	src/include/map.h
 	src/include/master.h
 	src/include/menus.h
@@ -617,15 +611,6 @@ if(UNIX AND CMAKE_SYSTEM_NAME MATCHES Linux)
 	set(LINUX true)
 endif()
 
-# Check if platform is Maemo
-if(LINUX)
-	find_package(PkgConfig QUIET REQUIRED)
-	pkg_check_modules(MAEMO_VERSION maemo-version)
-	if(MAEMO_VERSION_FOUND)
-		set(MAEMO true)
-	endif()
-endif()
-
 # Find all libraries
 
 option(ENABLE_STATIC "Compile Stratagus as static executable" OFF)
@@ -641,10 +626,6 @@ find_package(PNG REQUIRED)
 find_package(SDL REQUIRED)
 find_package(Tolua++ REQUIRED)
 find_package(ZLIB REQUIRED)
-
-if(MAEMO)
-	pkg_check_modules(LIBOSSO REQUIRED libosso)
-endif()
 
 if(WIN32)
 	find_package(MakeNSIS)
@@ -801,9 +782,6 @@ elseif(WITH_RENDERER STREQUAL "OpenGLES" AND OPENGLES_FOUND AND SDLGLES_FOUND)
 	if(SDLGLES_TYPE STREQUAL "Native")
 		add_definitions(-DUSE_GLES_NATIVE)
 		message(STATUS "Using OpenGLES (SDL Native)")
-	elseif(SDLGLES_TYPE STREQUAL "Maemo")
-		add_definitions(-DUSE_GLES_MAEMO)
-		message(STATUS "Using OpenGLES (SDL Maemo)")
 	elseif(SDLGLES_TYPE STREQUAL "EGL")
 		add_definitions(-DUSE_GLES_EGL)
 		message(STATUS "Using OpenGLES (SDL EGL)")
@@ -849,15 +827,6 @@ endif()
 if(BEOS)
 	add_definitions(-DUSE_BEOS)
 	set(stratagus_SRCS ${stratagus_SRCS} ${beos_SRCS})
-endif()
-
-if(MAEMO)
-	add_definitions(-DUSE_MAEMO ${LIBOSSO_CFLAGS})
-	include_directories(${LIBOSSO_INCLUDE_DIRS})
-	set(stratagus_SRCS ${stratagus_SRCS} ${maemo_SRCS})
-	set(stratagus_LIBS ${stratagus_LIBS} ${LIBOSSO_LIBRARIES})
-	# Hack/Bug: On Maemo is not possible to disable touch screen input
-	set(ENABLE_TOUCHSCREEN ON)
 endif()
 
 # Stratagus needs to have char by default signed
@@ -991,8 +960,6 @@ elseif(BSD)
 	message("Platform: BSD")
 elseif(BEOS)
 	message("Platform: BEOS")
-elseif(MAEMO)
-	message("Platform: Maemo")
 elseif(LINUX)
 	message("Platform: Linux")
 else()
@@ -1163,7 +1130,6 @@ endif()
 set(gameheaders_HDRS
 	gameheaders/stratagus-game-installer.nsi
 	gameheaders/stratagus-game-launcher.h
-	gameheaders/stratagus-maemo-extract.h
 )
 source_group(gameheaders FILES ${gameheaders_HDRS})
 

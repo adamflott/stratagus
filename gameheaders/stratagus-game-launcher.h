@@ -127,10 +127,6 @@
 #endif
 #endif
 
-#if ( defined (MAEMO_GTK) || defined (MAEMO_CHANGES) ) && ! defined (MAEMO)
-#define MAEMO
-#endif
-
 #ifdef WIN32
 #define WINVER 0x0501
 #include <windows.h>
@@ -161,10 +157,6 @@
 #include <gtk/gtk.h>
 #endif
 
-#ifdef MAEMO
-#include <hildon/hildon.h>
-#endif
-
 #ifdef _WIN64
 #define REGKEY "Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Stratagus (64 bit)"
 #elif defined (WIN32)
@@ -192,12 +184,6 @@ static void error(char * title, char * text) {
 		GtkWidget * window = NULL;
 		GtkWidget * dialog = NULL;
 
-#ifdef MAEMO
-		window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-		gtk_window_set_title(GTK_WINDOW(window), title);
-		gtk_widget_show(window);
-#endif
-
 		dialog = gtk_message_dialog_new(GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "%s", text);
 		gtk_window_set_title(GTK_WINDOW(dialog), title);
 		gtk_window_set_skip_pager_hint(GTK_WINDOW(dialog), 0);
@@ -206,9 +192,6 @@ static void error(char * title, char * text) {
 		gtk_dialog_run(GTK_DIALOG(dialog));
 		gtk_widget_destroy(dialog);
 
-#ifdef MAEMO
-		gtk_widget_destroy(window);
-#endif
 	} else {
 		fprintf(stderr, "%s -- Error: %s\n", title, text);
 	}
@@ -223,18 +206,11 @@ int main(int argc, char * argv[]) {
 		ConsoleMode = 1;
 	}
 	if ( ConsoleMode ) {
-#ifdef MAEMO
-		error(TITLE, NO_X_DISPLAY);
-#else
 		if ( getuid() != 0 ) {
 			error(TITLE, CONSOLE_MODE_NOT_ROOT);
 		}
-#endif
 	} else {
 		gtk_init(&argc, &argv);
-#ifdef MAEMO
-		hildon_init();
-#endif
 	}
 #endif
 
