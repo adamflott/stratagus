@@ -1,11 +1,3 @@
-debian/*.debhelper
-debian/*.log
-debian/*.substvars
-debian/files
-debian/stratagus
-debian/stratagus-dbg
-debian/stratagus-dev
-debian/stratagus-doc
 obj-*
 ./*.filters
 ./*.user
@@ -26,3 +18,4 @@ obj-*
 ./stratagus.suo
 ./tolua.cpp
 ./tolua.cpp.rule
+build
